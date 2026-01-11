@@ -1,0 +1,90 @@
+<div class="todo-container">
+  <div class="add-todo-form">
+    <h2>Add New Task</h2>
+    <div class="form-group">
+      <input
+        type="text"
+        [(ngModel)]="newTodo.title"
+        placeholder="Task title *"
+        class="form-input"
+      />
+    </div>
+
+    <div class="form-group">
+      <textarea
+        [(ngModel)]="newTodo.description"
+        placeholder="Description (optional)"
+        class="form-input"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Priority</label>
+        <select [(ngModel)]="newTodo.priority" class="form-input">
+          <option [value]="1">Low (1)</option>
+          <option [value]="2">Medium (2)</option>
+          <option [value]="3">High (3)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Due Date</label>
+        <input
+          type="date"
+          [(ngModel)]="newTodo.dueDate"
+          class="form-input"
+        />
+      </div>
+    </div>
+
+    <button (click)="addTodo()" class="add-btn">Add Task</button>
+  </div>
+
+  <div class="todo-list">
+    <h2>My Tasks ({{ todos.length }})</h2>
+
+    <table *ngIf="todos.length > 0; else noTodos">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Priority</th>
+          <th>Due Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let todo of todos" [class.completed]="todo.status === 'COMPLETED'">
+          <td>
+            <input
+              type="checkbox"
+              [checked]="todo.status === 'COMPLETED'"
+              (change)="toggleStatus(todo)"
+            />
+            <span class="status-badge" [class.status-completed]="todo.status === 'COMPLETED'">
+              {{ todo.status }}
+            </span>
+          </td>
+          <td class="todo-title">{{ todo.title }}</td>
+          <td class="todo-description">{{ todo.description || '-' }}</td>
+          <td>
+            <span class="priority-badge priority-{{ todo.priority }}">
+              {{ todo.priority === 3 ? 'High' : todo.priority === 2 ? 'Medium' : 'Low' }}
+            </span>
+          </td>
+          <td>{{ todo.dueDate || '-' }}</td>
+          <td>
+            <button (click)="deleteTodo(todo.id!)" class="delete-btn">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noTodos>
+      <p class="no-todos">No tasks yet. Add one above!</p>
+    </ng-template>
+  </div>
+</div>
