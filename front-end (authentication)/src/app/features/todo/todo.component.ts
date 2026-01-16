@@ -16,6 +16,9 @@ export class TodoComponent implements OnInit {
   filtered: Todo[] = [];
   isSubmitting: boolean = false;  // Add this flag
 
+  showValidationPopup = false;
+  validationErrors: string[] = [];
+
   newTodo: Todo = {
     title: '',
     description: '',
@@ -42,7 +45,10 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  addTodo() {
+  addTodo(): void  {
+
+    this.validationErrors = [];
+
     if (this.newTodo.title.trim() && !this.isSubmitting) {  // Check if not already submitting
       this.isSubmitting = true;  // Disable button
 
@@ -59,7 +65,26 @@ export class TodoComponent implements OnInit {
         }
       });
     }
+
+    if (!this.newTodo.title || this.newTodo.title.trim() === '') {
+      this.validationErrors.push('Task title is required');
+    }
+
+    if (!this.newTodo.dueDate) {
+      this.validationErrors.push('Due date is required');
+    }
+
+    // Show popup if there are errors
+    if (this.validationErrors.length > 0) {
+      this.showValidationPopup = true;
+      return;
+    }
   }
+  closePopup(): void {
+    this.showValidationPopup = false;
+    this.validationErrors = [];
+  }
+
 
   toggleStatus(todo: Todo) {
     todo.status = todo.status === 'PENDING' ? 'COMPLETED' : 'PENDING';

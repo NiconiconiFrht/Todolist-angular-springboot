@@ -1,4 +1,21 @@
 <div class="todo-container">
+  <div class="popup-overlay" *ngIf="showValidationPopup" (click)="closePopup()">
+    <div class="popup-content" (click)="$event.stopPropagation()">
+      <div class="popup-header">
+        <h3>⚠️ Required Fields Missing</h3>
+        <button class="close-btn" (click)="closePopup()">&times;</button>
+      </div>
+      <div class="popup-body">
+        <p>Please fill in the following required fields:</p>
+        <ul>
+          <li *ngFor="let error of validationErrors">{{ error }}</li>
+        </ul>
+      </div>
+      <div class="popup-footer">
+        <button class="ok-btn" (click)="closePopup()">OK</button>
+      </div>
+    </div>
+  </div>
   <div class="add-todo-form">
     <h2>Add New Task</h2>
     <div class="form-group">
@@ -6,7 +23,7 @@
         type="text"
         [(ngModel)]="newTodo.title"
         placeholder="Task title *"
-        class="form-input"
+        class="form-input" required
       />
     </div>
 
@@ -15,7 +32,7 @@
         [(ngModel)]="newTodo.description"
         placeholder="Description (optional)"
         class="form-input"
-        rows="3"
+        rows="3" required
       ></textarea>
     </div>
 
@@ -34,7 +51,7 @@
         <input
           type="date"
           [(ngModel)]="newTodo.dueDate"
-          class="form-input"
+          class="form-input" required
         />
       </div>
     </div>
